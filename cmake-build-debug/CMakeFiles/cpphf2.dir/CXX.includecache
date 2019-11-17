@@ -1,0 +1,72 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CSrcHighlighter.cpp
+CSrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CSrcHighlighter.h
+
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CSrcHighlighter.h
+iostream
+-
+regex
+-
+sstream
+-
+SrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/SrcHighlighter.h
+
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CppSrcHighlighter.cpp
+CppSrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CppSrcHighlighter.h
+
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CppSrcHighlighter.h
+regex
+-
+SrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/SrcHighlighter.h
+
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/SrcHighlighter.cpp
+SrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/SrcHighlighter.h
+
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/SrcHighlighter.h
+algorithm
+-
+fstream
+-
+iostream
+-
+regex
+-
+string
+-
+vector
+-
+
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/main.cpp
+fstream
+-
+iostream
+-
+memory
+-
+regex
+-
+string
+-
+string_view
+-
+vector
+-
+SrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/SrcHighlighter.h
+CSrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CSrcHighlighter.h
+CppSrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CppSrcHighlighter.h
+
