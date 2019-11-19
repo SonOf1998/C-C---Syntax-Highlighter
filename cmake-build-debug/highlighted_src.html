@@ -1,619 +1,67 @@
 <pre>
-<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltctype.h&gt</span>
-<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltmath.h&gt</span>
-<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltstdbool.h&gt</span>
-<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltstdio.h&gt</span>
-<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltstdlib.h&gt</span>
-<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltstring.h&gt</span>
-<span style="color:#C19600;">#include </span><span style="color:#339900;">&lttime.h&gt</span>
+<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltiostream&gt</span>
+<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltmemory&gt</span>
+<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltregex&gt</span>
+<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltstring&gt</span>
+<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltstring_view&gt</span>
+<span style="color:#C19600;">#include </span><span style="color:#339900;">&ltvector&gt</span>
 
-<span style="color:#C19600;">#include </span><span style="color:#339900;">"konzol_grafika.h"</span>
-<span style="color:#C19600;">#include </span><span style="color:#339900;">"strukturak.h"</span>
-<span style="color:#C19600;">#include </span><span style="color:#339900;">"debugmalloc.h"</span>
+<span style="color:#C19600;">#include </span><span style="color:#339900;">"SrcHighlighter.h"</span>
+<span style="color:#C19600;">#include </span><span style="color:#339900;">"CSrcHighlighter.h"</span>
+<span style="color:#C19600;">#include </span><span style="color:#339900;">"CppSrcHighlighter.h"</span>
 
+<span style="color:#C19600;">#define </span><span style="color:#339900;">TEST_OUTPUT </span>&ltspan style="color:#339900;"&gt"highlighted_src.html"&lt/span&gt
 
-/*void ekezetmentesites(<span style="color:#0000ff;">char</span> *szoveg)
-{
-    <span style="color:#666666;">// A probléma a multi character constant hibaüzenettel van.</span>
-    <span style="color:#666666;">// Nem minden 2. pozíciót vizsgáltam, hanem a karaktereket párosával, hiszen a magyar ékezetes</span>
-    <span style="color:#666666;">// betûk utf8-ban két karaktert foglalnak, ez indokolta a strcmp használatát az összehasonlításnál</span>
+<span style="color:#666666;">/*
+ * GyengesÃ©gek:
+ *
+ * A     katakterek sehol nem fordulhatnak elÅ‘ a forrÃ¡skÃ³dban
+ * A string literÃ¡lokban Ã©s kommentekben nem fordulhatnak elÅ‘ html tagszerÅ± elemek (<...>), include-ok kivÃ©telt kÃ©peznek.
+ * String literÃ¡lok utÃ¡ni szÃ¡mkonstansok mÃ¡r nem lesznek kikÃ©kÃ­tve.
+ *
+ */</span>
 
-    <span style="color:#666666;">// A megoldás a következõ lett: A fájl maga lett ékezettelenítve egy C# programmal, mert</span>
-    <span style="color:#666666;">// ott ilyen problémák nincsenek.</span>
-}*/
-
-<span style="color:#0000ff;">void</span> feldarabolas(Kerdes *k, <span style="color:#0000ff;">char</span> *sor)
-{
-    sscanf(sor, <span style="color:#339900;">"%d<span style="color:#000000;"><b>\t</b></span>%[^<span style="color:#000000;"><b>\t</b></span>]<span style="color:#000000;"><b>\t</b></span>%[^<span style="color:#000000;"><b>\t</b></span>]<span style="color:#000000;"><b>\t</b></span>%[^<span style="color:#000000;"><b>\t</b></span>]<span style="color:#000000;"><b>\t</b></span>%[^<span style="color:#000000;"><b>\t</b></span>]<span style="color:#000000;"><b>\t</b></span>%[^<span style="color:#000000;"><b>\t</b></span>]<span style="color:#000000;"><b>\t</b></span>%c<span style="color:#000000;"><b>\t</b></span>%s"</span>,
-           &k->nehezseg,
-           k->kerdes_szoveg,
-           k->A.kiiras,
-           k->B.kiiras,
-           k->C.kiiras,
-           k->D.kiiras,
-           &k->megoldas,
-           k->kategoria
-    );
-
-    k->A.betujel = <span style="color:#339900;">'A'</span>;
-    k->B.betujel = <span style="color:#339900;">'B'</span>;
-    k->C.betujel = <span style="color:#339900;">'C'</span>;
-    k->D.betujel = <span style="color:#339900;">'D'</span>;
-}
-
-<span style="color:#0000ff;">void</span> mentes(Jatekos j)
-{
-    FILE *ranglista;
-    ranglista = fopen(<span style="color:#339900;">"eredmenyek.txt"</span>, <span style="color:#339900;">"r"</span>);
-
-    Jatekos eddigi_jatekosok[<span style="color:#0000ff;">10</span>];
-    <span style="color:#0000ff;">char</span> sor[<span style="color:#0000ff;">256</span>];
-
-    <span style="color:#0000ff;">if</span>(ranglista)
-    {
-        <span style="color:#0000ff;">int</span> i = <span style="color:#0000ff;">0</span>;
-        <span style="color:#0000ff;">while</span>(fgets(sor, <span style="color:#0000ff;">sizeof</span>(sor), ranglista))
-        {
-            <span style="color:#0000ff;">if</span>(sor[<span style="color:#0000ff;">0</span>] != <span style="color:#339900;">'-'</span>)
-            {
-                sscanf(sor, <span style="color:#339900;">"%[^<span style="color:#000000;"><b>\t</b></span>]<span style="color:#000000;"><b>\t</b></span>%d<span style="color:#000000;"><b>\t</b></span>%d"</span>,
-                   eddigi_jatekosok[i].nev,
-                   &eddigi_jatekosok[i].nyeremeny,
-                   &eddigi_jatekosok[i].eltelt_ido
-                );
-            } <span style="color:#0000ff;">else</span> {
-                <span style="color:#0000ff;">for</span>(<span style="color:#0000ff;">int</span> k = i; k < <span style="color:#0000ff;">10</span>; k++)
-                {
-                    eddigi_jatekosok[k].nev[<span style="color:#0000ff;">0</span>] = <span style="color:#339900;">'\<span style="color:#0000ff;">0</span>'</span>;
-                    eddigi_jatekosok[k].nyeremeny = -<span style="color:#0000ff;">1</span>;
-                    eddigi_jatekosok[k].eltelt_ido = -<span style="color:#0000ff;">1</span>;
-                }
-                break;
-            }
-
-            i++;
-        }
-    } <span style="color:#0000ff;">else</span> {
-        perror(<span style="color:#339900;">"HIBA: "</span>);
-        exit(<span style="color:#0000ff;">0</span>);
-    }
-    fclose(ranglista);
-
-    <span style="color:#0000ff;">for</span>(<span style="color:#0000ff;">int</span> i = <span style="color:#0000ff;">0</span>; i < <span style="color:#0000ff;">10</span>; i++)
-    {
-        <span style="color:#0000ff;">if</span>(j.nyeremeny > eddigi_jatekosok[i].nyeremeny || (j.nyeremeny == eddigi_jatekosok[i].nyeremeny && j.eltelt_ido <= eddigi_jatekosok[i].eltelt_ido))
-        {
-            memmove(&eddigi_jatekosok[i + <span style="color:#0000ff;">1</span>], &eddigi_jatekosok[i], (<span style="color:#0000ff;">10</span> - i - <span style="color:#0000ff;">1</span>) * <span style="color:#0000ff;">sizeof</span>(Jatekos));
-            eddigi_jatekosok[i] = j;
-            break;
-        }
-    }
-
-    ranglista = fopen(<span style="color:#339900;">"eredmenyek.txt"</span>, <span style="color:#339900;">"w"</span>);
-
-    <span style="color:#0000ff;">for</span>(<span style="color:#0000ff;">int</span> i = <span style="color:#0000ff;">0</span>; i < <span style="color:#0000ff;">10</span>; i++)
-    {
-        <span style="color:#0000ff;">if</span>(eddigi_jatekosok[i].nyeremeny != -<span style="color:#0000ff;">1</span>)
-        {
-            fprintf(ranglista, <span style="color:#339900;">"%s<span style="color:#000000;"><b>\t</b></span>%d<span style="color:#000000;"><b>\t</b></span>%d<span style="color:#000000;"><b>\r</b></span><span style="color:#000000;"><b>\n</b></span>"</span>, eddigi_jatekosok[i].nev, eddigi_jatekosok[i].nyeremeny, eddigi_jatekosok[i].eltelt_ido);
-        } <span style="color:#0000ff;">else</span> {
-            fprintf(ranglista, <span style="color:#339900;">"-<span style="color:#000000;"><b>\r</b></span><span style="color:#000000;"><b>\n</b></span>"</span>);
-        }
-    }
-
-    fclose(ranglista);
-}
-
-<span style="color:#0000ff;">int</span> hatvanyozas(<span style="color:#0000ff;">int</span> alap, <span style="color:#0000ff;">int</span> kitevo)
-{
-    <span style="color:#0000ff;">if</span>(kitevo == <span style="color:#0000ff;">0</span>)
-    {
-        <span style="color:#0000ff;">return</span> <span style="color:#0000ff;">1</span>;
-    }
-
-    <span style="color:#0000ff;">return</span> alap * hatvanyozas(alap, kitevo - <span style="color:#0000ff;">1</span>);
-}
-
-<span style="color:#0000ff;">char</span> *szam_formazas(<span style="color:#0000ff;">int</span> szam)
-{
-    <span style="color:#0000ff;">int</span> szjegyek_szama = floor(log10(szam)) + <span style="color:#0000ff;">1</span>;
-    <span style="color:#0000ff;">int</span> n = szjegyek_szama + (szjegyek_szama - <span style="color:#0000ff;">1</span>) / <span style="color:#0000ff;">3</span> + <span style="color:#0000ff;">1</span>;
-    <span style="color:#0000ff;">char</span> *p = (<span style="color:#0000ff;">char</span>*)malloc(n);
-    p[n - <span style="color:#0000ff;">1</span>] = <span style="color:#339900;">'\<span style="color:#0000ff;">0</span>'</span>;
-    <span style="color:#0000ff;">int</span> j = <span style="color:#0000ff;">0</span>;
-    <span style="color:#0000ff;">for</span>(<span style="color:#0000ff;">int</span> i = n - <span style="color:#0000ff;">2</span>; i >= <span style="color:#0000ff;">0</span>; i--)
-    {
-        <span style="color:#0000ff;">if</span>((n - <span style="color:#0000ff;">1</span> - i) % <span style="color:#0000ff;">4</span> == <span style="color:#0000ff;">0</span>)
-        {
-            p[i] = <span style="color:#339900;">' '</span>;
-        } <span style="color:#0000ff;">else</span> {
-            p[i] = (szam % hatvanyozas(<span style="color:#0000ff;">10</span>, j + <span style="color:#0000ff;">1</span>)) / hatvanyozas(<span style="color:#0000ff;">10</span>, j) + <span style="color:#339900;">'0'</span>;
-            j++;
-        }
-    }
-
-    <span style="color:#0000ff;">return</span> p;
-}
-
-<span style="color:#0000ff;">void</span> szavazas(<span style="color:#0000ff;">int</span> nehezseg, <span style="color:#0000ff;">char</span> megoldas, <span style="color:#0000ff;">double</span> *a, <span style="color:#0000ff;">double</span> *b, <span style="color:#0000ff;">double</span> *c, <span style="color:#0000ff;">double</span> *d)
-{
-    <span style="color:#0000ff;">double</span> szazalekok[<span style="color:#0000ff;">4</span>] = {0};
-
-    <span style="color:#0000ff;">double</span> randomertek = ((rand() % (<span style="color:#0000ff;">9633</span> - <span style="color:#0000ff;">9325</span> + <span style="color:#0000ff;">1</span>) + <span style="color:#0000ff;">9325</span>) - (nehezseg * (rand() % (<span style="color:#0000ff;">533</span> - <span style="color:#0000ff;">525</span> + <span style="color:#0000ff;">1</span>) + <span style="color:#0000ff;">525</span>))) / <span style="color:#0000ff;">100.0</span>;
-    szazalekok[megoldas - <span style="color:#339900;">'A'</span>] = randomertek;
-
-    <span style="color:#0000ff;">double</span> osszeg = szazalekok[<span style="color:#0000ff;">0</span>] + szazalekok[<span style="color:#0000ff;">1</span>] + szazalekok[<span style="color:#0000ff;">2</span>] + szazalekok[<span style="color:#0000ff;">3</span>];
-    <span style="color:#0000ff;">while</span>(osszeg != <span style="color:#0000ff;">100.0</span>)
-    {
-        <span style="color:#0000ff;">for</span>(<span style="color:#0000ff;">int</span> i = <span style="color:#0000ff;">0</span>; i < <span style="color:#0000ff;">4</span>; i++)
-        {
-            <span style="color:#0000ff;">if</span>(szazalekok[i] != randomertek)
-            {
-                szazalekok[i] = (rand() % <span style="color:#0000ff;">3001</span>) / <span style="color:#0000ff;">100.0</span>;
-            }
-        }
-        osszeg = szazalekok[<span style="color:#0000ff;">0</span>] + szazalekok[<span style="color:#0000ff;">1</span>] + szazalekok[<span style="color:#0000ff;">2</span>] + szazalekok[<span style="color:#0000ff;">3</span>];
-    }
-
-    *a = szazalekok[<span style="color:#0000ff;">0</span>];
-    *b = szazalekok[<span style="color:#0000ff;">1</span>];
-    *c = szazalekok[<span style="color:#0000ff;">2</span>];
-    *d = szazalekok[<span style="color:#0000ff;">3</span>];
-}
-
-<span style="color:#0000ff;">int</span> fixnyeremeny(<span style="color:#0000ff;">int</span> eddigi_nyeremeny)
-{
-    <span style="color:#666666;">//Akkor hívódik meg ha a játékos hibásan válaszol a kérdésre</span>
-    <span style="color:#666666;">//Ekkor ugyebár az eddig megszerzett legnagyobb fixnyereményt kapja meg</span>
-
-    <span style="color:#0000ff;">if</span>(eddigi_nyeremeny < <span style="color:#0000ff;">10000</span>)
-    {
-        <span style="color:#0000ff;">return</span> <span style="color:#0000ff;">0</span>;
-    } <span style="color:#0000ff;">else</span> <span style="color:#0000ff;">if</span>(eddigi_nyeremeny < <span style="color:#0000ff;">100000</span>) {
-        <span style="color:#0000ff;">return</span> <span style="color:#0000ff;">10000</span>;
-    } <span style="color:#0000ff;">else</span> <span style="color:#0000ff;">if</span>(eddigi_nyeremeny < <span style="color:#0000ff;">1000000</span>) {
-        <span style="color:#0000ff;">return</span> <span style="color:#0000ff;">100000</span>;
-    } <span style="color:#0000ff;">else</span> <span style="color:#0000ff;">if</span>(eddigi_nyeremeny < <span style="color:#0000ff;">5000000</span>) {
-        <span style="color:#0000ff;">return</span> <span style="color:#0000ff;">1000000</span>;
-    }
-
-    <span style="color:#0000ff;">return</span> <span style="color:#0000ff;">5000000</span>;
-}
-
-<span style="color:#0000ff;">void</span> hozzafuz(Kerdes **lista, Kerdes kerdes)
-{
-    Kerdes *uj = (Kerdes*)malloc(<span style="color:#0000ff;">sizeof</span>(Kerdes));
-    *uj = kerdes;
-    uj->kov = *lista;
-
-    <span style="color:#0000ff;">if</span>(*lista != NULL)
-    {
-        Kerdes *iter = *lista;
-        <span style="color:#0000ff;">while</span>(iter->kov != *lista)
-        {
-            iter = iter->kov;
-        }
-        iter->kov = uj;
-    } <span style="color:#0000ff;">else</span> {
-        uj->kov = uj;
-    }
-
-    *lista = uj;
-}
-
-Kerdes randomkerdes(Kerdes *lista)
-{
-    <span style="color:#0000ff;">int</span> random = rand() % <span style="color:#0000ff;">500</span>;
-    Kerdes *iter = lista;
-
-    <span style="color:#0000ff;">while</span>(random != <span style="color:#0000ff;">0</span>)
-    {
-        iter = iter->kov;
-        random--;
-    }
-
-    <span style="color:#0000ff;">return</span> *iter;
-}
-
-<span style="color:#0000ff;">void</span> felszabadit(Kerdes *lista)
-{
-    Kerdes *iter = lista;
-
-    <span style="color:#0000ff;">while</span>(iter->kov != lista)
-    {
-        Kerdes *tmp = iter->kov;
-        free(iter);
-        iter = tmp;
-    }
-    free(iter);
-}
 
 <span style="color:#0000ff;">int</span> main()
 {
-    fomenu_megjelenites();
-    <span style="color:#0000ff;">char</span> input[<span style="color:#0000ff;">2</span>];
-    <span style="color:#0000ff;">char</span> BEOLVASOTT_KARAKTER;
+    std::cout << <span style="color:#339900;">"Full path of C/C++ source code file: "</span> << std::endl;
+    std::string path;
+    std::getline(std::cin, path);       <span style="color:#666666;">// szÃ³kÃ¶zÃ¶s mappÃ¡kra</span>
 
-    <span style="color:#666666;">// Amennyiben nem létezik az eredmenyek.txt, létrehozzuk és</span>
-    <span style="color:#666666;">// feltöltjük tíz sorát '-' jelekkel. Ez jelenti a még üres ranglistát.</span>
-    FILE *ranglista = fopen(<span style="color:#339900;">"eredmenyek.txt"</span>, <span style="color:#339900;">"rb+"</span>);
-    <span style="color:#0000ff;">if</span>(ranglista == NULL)
+    std::vector<std::string> file;
+    std::string line;
+    std::ifstream is(std::cref(path));
+
+    <span style="color:#0000ff;">while</span> (std::getline(is, line))
     {
-        fclose(ranglista);
-        ranglista = fopen(<span style="color:#339900;">"eredmenyek.txt"</span>, <span style="color:#339900;">"wb"</span>);
-        <span style="color:#0000ff;">for</span>(<span style="color:#0000ff;">int</span> i = <span style="color:#0000ff;">0</span>; i < <span style="color:#0000ff;">10</span>; i++)
-        {
-            fprintf(ranglista, <span style="color:#339900;">"-<span style="color:#000000;"><b>\r</b></span><span style="color:#000000;"><b>\n</b></span>"</span>);
-        }
+        file.push_back(std::move(line));
     }
-    fclose(ranglista);
+    is.close();
 
-    <span style="color:#666666;">/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////</span>
-    <span style="color:#666666;">////////////////////////////////// Fõmenü input-elágazás blokk  /////////////////////////////////////////////////////</span>
-    <span style="color:#666666;">/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////</span>
-    scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-    BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-    <span style="color:#0000ff;">while</span>(strlen(input) != <span style="color:#0000ff;">1</span> || (BEOLVASOTT_KARAKTER != <span style="color:#339900;">'J'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'E'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'x'</span>))
-    {
-        printf(<span style="color:#339900;">"Hibas karakter J/E/x: "</span>);
-        scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-        BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-    }
-
-    <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == <span style="color:#339900;">'x'</span>)
-    {
-        printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span><span style="color:#000000;"><b>\n</b></span>--------------------------------------------<span style="color:#000000;"><b>\n</b></span>"</span>);
-        printf(<span style="color:#339900;">"--- A PROGRAMBOL VALO KILEPES MEGTORTENT ---<span style="color:#000000;"><b>\n</b></span>"</span>);
-        printf(<span style="color:#339900;">"--------------------------------------------<span style="color:#000000;"><b>\n</b></span>"</span>);
-        <span style="color:#0000ff;">return</span> <span style="color:#0000ff;">0</span>;
-    } <span style="color:#0000ff;">else</span> <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == <span style="color:#339900;">'E'</span>) {
-        eredmenytabla_megjelenites();
-        scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-        BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-        <span style="color:#0000ff;">while</span>(strlen(input) != <span style="color:#0000ff;">1</span> || (BEOLVASOTT_KARAKTER != <span style="color:#339900;">'J'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'x'</span>))
-        {
-            printf(<span style="color:#339900;">"Hibas karakter J/x: "</span>);
-            scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-            BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-        }
-
-        <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == <span style="color:#339900;">'x'</span>)
-        {
-            printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span><span style="color:#000000;"><b>\n</b></span>--------------------------------------------<span style="color:#000000;"><b>\n</b></span>"</span>);
-            printf(<span style="color:#339900;">"--- A PROGRAMBOL VALO KILEPES MEGTORTENT ---<span style="color:#000000;"><b>\n</b></span>"</span>);
-            printf(<span style="color:#339900;">"--------------------------------------------<span style="color:#000000;"><b>\n</b></span>"</span>);
-            <span style="color:#0000ff;">return</span> <span style="color:#0000ff;">0</span>;
-        }
-    }
-    <span style="color:#666666;">/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////</span>
-    <span style="color:#666666;">/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////</span>
-
-
-
-    FILE *szovegfajl = fopen(<span style="color:#339900;">"kerdesek.txt"</span>, <span style="color:#339900;">"r"</span>);
-    <span style="color:#0000ff;">char</span> sor[<span style="color:#0000ff;">256</span>];
-
-    Kerdes *kerdes_listak[<span style="color:#0000ff;">10</span>] = {NULL};
-    bool elso_sor_beolvasva = false;
-
-    <span style="color:#0000ff;">if</span>(szovegfajl)
-    {
-        <span style="color:#0000ff;">while</span> (fgets(sor, <span style="color:#0000ff;">sizeof</span>(sor), szovegfajl))
-        {
-            <span style="color:#0000ff;">if</span>(!elso_sor_beolvasva)
+    <span style="color:#0000ff;">const</span> std::unique_ptr<SrcHighlighter> highlighter = std::move (
+            [&]() -> std::unique_ptr<SrcHighlighter>
             {
-                <span style="color:#666666;">// UTF8 (BOM) Byte Order Mark eltávolítás a legelsõ sorból</span>
-                <span style="color:#666666;">// sor[0,1,2] = 0xEF,0xBB,0xBF</span>
-		<span style="color:#666666;">// <J/x/E></span>
-
-                memmove(sor, sor + <span style="color:#0000ff;">3</span>, <span style="color:#0000ff;">sizeof</span>(sor));
-                elso_sor_beolvasva = true;
-            }
-
-            Kerdes kerdes;
-            feldarabolas(&kerdes, sor);
-            <span style="color:#0000ff;">if</span>(kerdes.nehezseg <= <span style="color:#0000ff;">10</span>)
-            {
-                hozzafuz(&kerdes_listak[kerdes.nehezseg - <span style="color:#0000ff;">1</span>], kerdes);
-            } <span style="color:#0000ff;">else</span> {
-                hozzafuz(&kerdes_listak[<span style="color:#0000ff;">9</span>], kerdes);
-            }
-        }
-    } <span style="color:#0000ff;">else</span> {
-        perror(<span style="color:#339900;">"HIBA: "</span>);
-        <span style="color:#0000ff;">return</span> <span style="color:#0000ff;">0</span>;
-    }
-
-    fclose(szovegfajl);
-
-    srand(time(<span style="color:#0000ff;">0</span>));
-
-    <span style="color:#0000ff;">int</span> <span style="color:#0000ff;">const</span> nyeremenyek[<span style="color:#0000ff;">10</span>] = {
-        <span style="color:#0000ff;">10000</span>,      <span style="color:#666666;">//FIxNYERERMÉNY</span>
-        <span style="color:#0000ff;">50000</span>,
-        <span style="color:#0000ff;">100000</span>,     <span style="color:#666666;">//FIxNYERERMÉNY</span>
-        <span style="color:#0000ff;">250000</span>,
-        <span style="color:#0000ff;">500000</span>,
-        <span style="color:#0000ff;">1000000</span>,    <span style="color:#666666;">//FIxNYERERMÉNY</span>
-        <span style="color:#0000ff;">2000000</span>,
-        <span style="color:#0000ff;">5000000</span>,    <span style="color:#666666;">//FIxNYERERMÉNY</span>
-        <span style="color:#0000ff;">10000000</span>,
-        <span style="color:#0000ff;">20000000</span>
-    };
+                std::regex cFileRegex(R<span style="color:#339900;">"(.*\.c)"</span>);
+                std::regex cppFileRegex(R<span style="color:#339900;">"(.*\.((cc)|(cpp)|(cxx)))"</span>);
 
 
-    bool jatekban_vagyunk = true;
-    time_t start, vege;
-
-    bool felezes_hasznalhato;
-    bool kozonseg_hasznalhato;
-
-    <span style="color:#0000ff;">int</span> eddigi_nyeremeny;
-    Jatekos jatekos;
-    <span style="color:#0000ff;">char</span> nev[<span style="color:#0000ff;">14</span>];
-    <span style="color:#0000ff;">do</span>
-    {
-        <span style="color:#666666;">//////////////////////////////////////////////////////////////////////////////////////////////////////</span>
-        <span style="color:#666666;">/////////////////////////////////  Név bekérés blokkja  //////////////////////////////////////////////</span>
-        <span style="color:#666666;">//////////////////////////////////////////////////////////////////////////////////////////////////////</span>
-        bool nev_megfelelo = false;
-        <span style="color:#0000ff;">while</span>(!nev_megfelelo)
-        {
-            nev_bekeres();
-            scanf(<span style="color:#339900;">" %[^<span style="color:#000000;"><b>\n</b></span>]s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, nev);
-
-            nev_megfelelo = true;
-            <span style="color:#0000ff;">int</span> i = <span style="color:#0000ff;">0</span>;
-            <span style="color:#0000ff;">while</span>(nev[i] != <span style="color:#339900;">'\<span style="color:#0000ff;">0</span>'</span>)
-            {
-                <span style="color:#0000ff;">if</span>(!((nev[i] <= <span style="color:#339900;">'z'</span> && nev[i] >= <span style="color:#339900;">'a'</span>) || (nev[i] <= <span style="color:#339900;">'Z'</span> && nev[i] >= <span style="color:#339900;">'A'</span>) || (nev[i] <= <span style="color:#339900;">'9'</span> && nev[i] >= <span style="color:#339900;">'0'</span>) || nev[i] == <span style="color:#339900;">' '</span>))
+                <span style="color:#0000ff;">if</span> (std::regex_match(path, cFileRegex))
                 {
-                    nev_megfelelo = false;
-                    break;
+                    <span style="color:#0000ff;">return</span> std::make_unique<CSrcHighlighter>(file);
                 }
-                i++;
-            }
-
-
-            <span style="color:#0000ff;">if</span>(strlen(nev) > <span style="color:#0000ff;">12</span>)
-            {
-                nev_megfelelo = false;
-            }
-        }
-        <span style="color:#666666;">//////////////////////////////////////////////////////////////////////////////////////////////////////</span>
-        <span style="color:#666666;">//////////////////////////////////////////////////////////////////////////////////////////////////////</span>
-
-
-        <span style="color:#666666;">// Ha a megfelelõ név megvan akkor kinullázhatjuk a játékot meghatározó változókat..</span>
-        <span style="color:#666666;">// Az, hogy ezt a do-while cikluson belül tesszük, azért jó, mert így meg tudjuk oldani</span>
-        <span style="color:#666666;">// egyszerûen egy új játék indítását.</span>
-        kozonseg_hasznalhato = true;
-        felezes_hasznalhato = true;
-        eddigi_nyeremeny = <span style="color:#0000ff;">0</span>;
-        time(&start);
-
-        <span style="color:#0000ff;">for</span>(<span style="color:#0000ff;">int</span> i = <span style="color:#0000ff;">0</span>; i < <span style="color:#0000ff;">10</span>; i++)
-        {
-            Kerdes k = randomkerdes(kerdes_listak[i]);
-            kerdes_kiiras(k, i, nyeremenyek[i], felezes_hasznalhato, kozonseg_hasznalhato);
-/**/        scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-            BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-            <span style="color:#0000ff;">while</span>(strlen(input) != <span style="color:#0000ff;">1</span> || (BEOLVASOTT_KARAKTER != <span style="color:#339900;">'A'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'B'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'C'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'D'</span> &&
-            !(BEOLVASOTT_KARAKTER == <span style="color:#339900;">'F'</span> && felezes_hasznalhato) && !(BEOLVASOTT_KARAKTER == <span style="color:#339900;">'K'</span> && kozonseg_hasznalhato)))
-            {
-                printf(<span style="color:#339900;">"Ismeretlen karakter! Probalja ujra! A/B/C/D"</span>);
-                <span style="color:#0000ff;">if</span>(felezes_hasznalhato)
+                <span style="color:#0000ff;">else</span> <span style="color:#0000ff;">if</span> (std::regex_match(path, cppFileRegex))
                 {
-                    printf(<span style="color:#339900;">"/F"</span>);
-                }
-                <span style="color:#0000ff;">if</span>(kozonseg_hasznalhato)
-                {
-                    printf(<span style="color:#339900;">"/K"</span>);
-                }
-                printf(<span style="color:#339900;">">: "</span>);
-                scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-                BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-            }
-
-            <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == k.megoldas)
-            {
-                <span style="color:#0000ff;">if</span>(i == <span style="color:#0000ff;">10</span> - <span style="color:#0000ff;">1</span>)
-                {
-                    printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Helyes valasz!<span style="color:#000000;"><b>\n</b></span><span style="color:#000000;"><b>\n</b></span>"</span>);
-                    printf(<span style="color:#339900;">">>> Gratulalunk a fonyeremenyhez! <<<"</span>);
-
-                    eddigi_nyeremeny = nyeremenyek[i];
-                    break;
-                }
-                printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Helyes valasz. Folytassuk? I/N: "</span>);
-                scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-                BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-                <span style="color:#0000ff;">while</span>(strlen(input) != <span style="color:#0000ff;">1</span> || (BEOLVASOTT_KARAKTER != <span style="color:#339900;">'I'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'N'</span>))
-                {
-                    printf(<span style="color:#339900;">"Ervenytelen! <I/N>: "</span>);
-                    scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-                    BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-                }
-                eddigi_nyeremeny = nyeremenyek[i];
-                <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == <span style="color:#339900;">'N'</span>)
-                {
-                    break;
-                }
-            } <span style="color:#0000ff;">else</span> <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == <span style="color:#339900;">'K'</span>) {
-                kozonseg_hasznalhato = false;
-                <span style="color:#0000ff;">double</span> a, b, c, d;
-                szavazas(k.nehezseg, k.megoldas, &a, &b, &c, &d);
-                szavazas_kiiras(a, b, c, d);
-                printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Szavazas! Valasszon! A/B/C/D: "</span>);
-/**/            scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-                BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-                <span style="color:#0000ff;">while</span>(strlen(input) != <span style="color:#0000ff;">1</span> || (BEOLVASOTT_KARAKTER != <span style="color:#339900;">'A'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'B'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'C'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'D'</span>))
-                {
-                    printf(<span style="color:#339900;">"Ismeretlen karakter! Probalja ujra! <A/B/C/D>: "</span>);
-                    scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-                    BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
+                    <span style="color:#0000ff;">return</span> std::make_unique<CppSrcHighlighter>(file);
                 }
 
-                <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == k.megoldas)
-                {
-                    <span style="color:#0000ff;">if</span>(i == <span style="color:#0000ff;">10</span> - <span style="color:#0000ff;">1</span>)
-                    {
-                        printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Helyes valasz!<span style="color:#000000;"><b>\n</b></span><span style="color:#000000;"><b>\n</b></span>"</span>);
-                        printf(<span style="color:#339900;">">>> Gratulalunk a fonyeremenyhez! <<<"</span>);
+                <span style="color:#0000ff;">throw</span> std::runtime_error(<span style="color:#339900;">"Unknown file format!"</span>);
+            }()
+    );
 
-                        eddigi_nyeremeny = nyeremenyek[i];
-                        break;
-                    }
-                    printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Helyes valasz. Folytassuk? <I/N>: "</span>);
-                    scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-                    BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-                    <span style="color:#0000ff;">while</span>(strlen(input) != <span style="color:#0000ff;">1</span> || (BEOLVASOTT_KARAKTER != <span style="color:#339900;">'I'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'N'</span>))
-                    {
-                        printf(<span style="color:#339900;">"Ervenytelen! <I/N>: "</span>);
-                        scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-                        BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-                    }
-                    eddigi_nyeremeny = nyeremenyek[i];
-                    <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == <span style="color:#339900;">'N'</span>)
-                    {
-                        break;
-                    }
-                } <span style="color:#0000ff;">else</span> {
-                    printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Helytelen valasz. A helyes valasz a '%c' volt."</span>, k.megoldas);
-                    eddigi_nyeremeny = fixnyeremeny(eddigi_nyeremeny);
-                    break;
-                }
-            } <span style="color:#0000ff;">else</span> <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == <span style="color:#339900;">'F'</span>) {
-                felezes_hasznalhato = false;
-                bool valaszthato[<span style="color:#0000ff;">4</span>] = {false};
-                valaszthato[k.megoldas - <span style="color:#339900;">'A'</span>] = true;
-
-                <span style="color:#0000ff;">int</span> masik = rand() % <span style="color:#0000ff;">4</span>;
-                <span style="color:#0000ff;">while</span>(valaszthato[masik] == true)
-                {
-                    masik = rand() % <span style="color:#0000ff;">4</span>;
-                }
-
-                <span style="color:#0000ff;">if</span>(masik + <span style="color:#339900;">'A'</span> < k.megoldas)
-                {
-                    printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Felezes! Valasszon! %c/%c: "</span>, masik + <span style="color:#339900;">'A'</span>, k.megoldas);
-                } <span style="color:#0000ff;">else</span> {
-                    printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Felezes! Valasszon! %c/%c: "</span>, k.megoldas, masik + <span style="color:#339900;">'A'</span>);
-                }
-
-/**/            scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-                BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-                <span style="color:#0000ff;">while</span>(strlen(input) != <span style="color:#0000ff;">1</span> || (BEOLVASOTT_KARAKTER != masik + <span style="color:#339900;">'A'</span> && BEOLVASOTT_KARAKTER != k.megoldas))
-                {
-                    <span style="color:#0000ff;">if</span>(masik + <span style="color:#339900;">'A'</span> < k.megoldas)
-                    {
-                        printf(<span style="color:#339900;">"Ismeretlen karakter! Probalja ujra! %c/%c: "</span>, masik + <span style="color:#339900;">'A'</span>, k.megoldas);
-                    } <span style="color:#0000ff;">else</span> {
-                        printf(<span style="color:#339900;">"Ismeretlen karakter! Probalja ujra! %c/%c: "</span>, k.megoldas, masik + <span style="color:#339900;">'A'</span>);
-                    }
-                    scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-                    BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-                }
-
-                <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == k.megoldas)
-                {
-                    <span style="color:#0000ff;">if</span>(i == <span style="color:#0000ff;">10</span> - <span style="color:#0000ff;">1</span>)
-                    {
-                        printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Helyes valasz!<span style="color:#000000;"><b>\n</b></span><span style="color:#000000;"><b>\n</b></span>"</span>);
-                        printf(<span style="color:#339900;">">>> Gratulalunk a fonyeremenyhez! <<<"</span>);
-
-                        eddigi_nyeremeny = nyeremenyek[i];
-                        break;
-                    }
-                    printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Helyes valasz. Folytassuk? <I/N>: "</span>);
-                    scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-                    BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-                    <span style="color:#0000ff;">while</span>(strlen(input) != <span style="color:#0000ff;">1</span> || (BEOLVASOTT_KARAKTER != <span style="color:#339900;">'I'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'N'</span>))
-                    {
-                        printf(<span style="color:#339900;">"Ervenytelen! I/N: "</span>);
-                        scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-                        BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-                    }
-                    eddigi_nyeremeny = nyeremenyek[i];
-                    <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == <span style="color:#339900;">'N'</span>)
-                    {
-                        break;
-                    }
-                } <span style="color:#0000ff;">else</span> {
-                    printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Helytelen valasz. A helyes valasz a '%c' volt."</span>, k.megoldas);
-                    eddigi_nyeremeny = fixnyeremeny(eddigi_nyeremeny);
-                    break;
-                }
-            } <span style="color:#0000ff;">else</span> {
-                printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span>Helytelen valasz. A helyes valasz a '%c' volt."</span>, k.megoldas);
-                eddigi_nyeremeny = fixnyeremeny(eddigi_nyeremeny);
-                break;
-            }
-        }
-
-
-
-
-
-
-
-
-        time(&vege);
-        <span style="color:#0000ff;">if</span>(eddigi_nyeremeny != <span style="color:#0000ff;">0</span>)
-        {
-            strcpy(jatekos.nev, nev);
-            jatekos.eltelt_ido = (<span style="color:#0000ff;">int</span>)difftime(vege, start);
-            jatekos.nyeremeny = eddigi_nyeremeny;
-
-            mentes(jatekos);
-        }
-
-        jatekban_vagyunk = false;
-
-        ujjatek_kerdes(eddigi_nyeremeny);
-        scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-        BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-        <span style="color:#0000ff;">while</span>(strlen(input) != <span style="color:#0000ff;">1</span> || (BEOLVASOTT_KARAKTER != <span style="color:#339900;">'I'</span> && BEOLVASOTT_KARAKTER != <span style="color:#339900;">'N'</span>))
-        {
-            printf(<span style="color:#339900;">"Ervenytelen! <I/N>: "</span>);
-            scanf(<span style="color:#339900;">"%2s%*[^<span style="color:#000000;"><b>\n</b></span>]"</span>, input);
-            BEOLVASOTT_KARAKTER = toupper(input[<span style="color:#0000ff;">0</span>]);
-        }
-
-        <span style="color:#0000ff;">if</span>(BEOLVASOTT_KARAKTER == <span style="color:#339900;">'I'</span>)
-        {
-            jatekban_vagyunk = true;
-        } <span style="color:#0000ff;">else</span> {
-            printf(<span style="color:#339900;">"<span style="color:#000000;"><b>\n</b></span><span style="color:#000000;"><b>\n</b></span>--------------------------------------------<span style="color:#000000;"><b>\n</b></span>"</span>);
-            printf(<span style="color:#339900;">"--- A PROGRAMBOL VALO KILEPES MEGTORTENT ---<span style="color:#000000;"><b>\n</b></span>"</span>);
-            printf(<span style="color:#339900;">"--------------------------------------------<span style="color:#000000;"><b>\n</b></span>"</span>);
-        }
-
-    } <span style="color:#0000ff;">while</span>(jatekban_vagyunk);
-
-
-    <span style="color:#666666;">// A játék végeztével a kérdések tárolására szolgáló memória felszabadítása</span>
-    <span style="color:#0000ff;">for</span>(<span style="color:#0000ff;">int</span> i = <span style="color:#0000ff;">0</span>; i < <span style="color:#0000ff;">10</span>; i++)
-    {
-        felszabadit(kerdes_listak[i]);
-    }
-
-    <span style="color:#0000ff;">return</span> <span style="color:#0000ff;">0</span>;
+    highlighter->exportHighlightedSrcCode(TEST_OUTPUT);
 }
 
-
-<span style="color:#0000ff;">int</span> f(<span style="color:#0000ff;">int</span> a, <span style="color:#0000ff;">int</span> b)
-{  
-    <span style="color:#0000ff;">if</span>(a < b)
-    {
-	<span style="color:#0000ff;">return</span> a;
-    }	
-
-    <span style="color:#666666;">// :O // :o		</span>
-    <span style="color:#0000ff;">return</span> (<span style="color:#0000ff;">1</span>,<span style="color:#0000ff;">2</span>);		
-}
-
-
-
-
+<span style="color:#666666;">/* C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\c_test.c */</span>
+<span style="color:#666666;">/* C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\hard_test_c.c*/</span>
+<span style="color:#666666;">/* C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\c_file_elodtol.c*/</span>
 </pre>

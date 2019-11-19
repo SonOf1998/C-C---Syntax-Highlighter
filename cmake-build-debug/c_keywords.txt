@@ -17,6 +17,7 @@ if
 inline
 int
 long
+NULL
 register
 restrict
 return

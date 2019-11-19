@@ -9,6 +9,7 @@
 #include "CSrcHighlighter.h"
 #include "CppSrcHighlighter.h"
 
+
 #define TEST_OUTPUT "highlighted_src.html"
 
 /*
@@ -16,7 +17,7 @@
  *
  * A @ X ~ ` katakterek sehol nem fordulhatnak elő a forráskódban
  * A string literálokban és kommentekben nem fordulhatnak elő html tagszerű elemek (<...>), include-ok kivételt képeznek.
- *
+ * String literálok utáni számkonstansok már nem lesznek kikékítve.
  *
  */
 
@@ -62,3 +63,4 @@ int main()
 
 /* C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\c_test.c */
 /* C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\hard_test_c.c*/
+/* C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\c_file_elodtol.c*/

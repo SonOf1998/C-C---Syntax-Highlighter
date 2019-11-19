@@ -12,6 +12,7 @@
 class CSrcHighlighter final : public SrcHighlighter
 {
     [[nodiscard]] const char* getKeywordsTxtPath() const noexcept override;
+    void highlightProgrammingLangSpecificStuff() override {}
 
 public:
 

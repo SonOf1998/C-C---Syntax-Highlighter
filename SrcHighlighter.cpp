@@ -1,6 +1,6 @@
 #include "SrcHighlighter.h"
 
-SrcHighlighter::SrcHighlighter(std::vector<std::string>& file) noexcept : file{file}
+SrcHighlighter::SrcHighlighter(std::vector<std::string>& file) noexcept : file{file}, unmodifiedFile{file}
 {
 
 }
@@ -33,10 +33,12 @@ void SrcHighlighter::importPreprocessorDirectives()
 void SrcHighlighter::doSyntaxHighlighting()
 {
     highlightCharsAndStringLiterals();
-    highlightEscapes();
-    highlightKeywords();
-    highlightPreprocessorDirectives();
     highlightNumericConstants();
+    highlightKeywords();
+    highlightProgrammingLangSpecificStuff();
+    doubleCheckStringLiterals();
+    highlightEscapes();
+    highlightPreprocessorDirectives();
     handleSingleLineComments();
     handleMultiLineComments();
 }
@@ -87,7 +89,7 @@ void SrcHighlighter::highlightKeywords()
         while (modificationMade)
         {
             std::stringstream ss;
-            ss << "[ \t\\)\\(]" << keyword << "[ \t\\(\\)\\*]|^" << keyword << "[ \t\\(\\)\\*]|[ \t\\)\\(]" << keyword << "$|^" << keyword
+            ss << "[ \t\\)\\(;=]" << keyword << "[ \t\\(\\)\\*;]|^" << keyword << "[ \t\\(\\)\\*;]|[ \t\\)\\(;=]" << keyword << "$|^" << keyword
                << "$";
 
             std::string keywordRegexStr = ss.str();
@@ -183,47 +185,51 @@ void SrcHighlighter::highlightNumericConstants()
 {
     for(auto& line : file)
     {
-        std::regex regexForNumericConst("^[[:digit:]]*\\.?[[:digit:]]+f?|^[[digit]]+|[ \t\\)\\(><=+-/\\\\[*;][[:digit:]]*\\.?[[:digit:]]+f?|[ \t\\)\\(><=+-/\\\\[*;][[digit]]+");
-        line = std::regex_replace(line, regexForNumericConst, "~$0`");
-
-        bool modificationStart = false;
-        bool firstDigitFound = false;
-        for (int i = 0; i < static_cast<int>(line.size()); ++i)
+        std::regex regexForStringEncapsulutadNums(R"("[^"]*[[:digit:]]+[^"]*")");
+        if (!std::regex_search(line, regexForStringEncapsulutadNums))
         {
-            if (line[i] == '~')
+            std::regex regexForNumericConst("^[[:digit:]]*\\.?[[:digit:]]+f?|^[[digit]]+|[ \t\\)\\(><=+-/\\\\[*;][[:digit:]]*\\.?[[:digit:]]+f?|[ \t\\)\\(><=+-/\\\\[*;][[digit]]+");
+            line = std::regex_replace(line, regexForNumericConst, "~$0`");
+
+            bool modificationStart = false;
+            bool firstDigitFound = false;
+            for (int i = 0; i < static_cast<int>(line.size()); ++i)
             {
-                modificationStart = true;
-                continue;
-            }
-            else if(line[i] == '`')
-            {
-                modificationStart = false;
-                if (firstDigitFound)
+                if (line[i] == '~')
                 {
-                    line[i] = 'X';
+                    modificationStart = true;
+                    continue;
                 }
-                firstDigitFound = false;
+                else if(line[i] == '`')
+                {
+                    modificationStart = false;
+                    if (firstDigitFound)
+                    {
+                        line[i] = 'X';
+                    }
+                    firstDigitFound = false;
+                }
+
+                if (modificationStart)
+                {
+                    if ((std::isdigit(line[i]) || line[i] == '.') && !firstDigitFound)
+                    {
+                        line.insert(i,"@");
+                        firstDigitFound = true;
+                    }
+                    else if(firstDigitFound && !std::isdigit(line[i]) && line[i] != '.' && line[i] != 'f')
+                    {
+                        line[i] = 'X';
+                    }
+                }
             }
 
-            if (modificationStart)
-            {
-                if ((std::isdigit(line[i]) || line[i] == '.') && !firstDigitFound)
-                {
-                    line.insert(i,"@");
-                    firstDigitFound = true;
-                }
-                else if(firstDigitFound && !std::isdigit(line[i]) && line[i] != '.' && line[i] != 'f')
-                {
-                    line[i] = 'X';
-                }
-            }
+            line = std::regex_replace(line, std::regex("@"), "<span style=\"color:#0000ff;\">");
+            line = std::regex_replace(line, std::regex("X"), "</span>");
+
+            line.erase(std::remove(line.begin(), line.end(), '~'), line.end());
+            line.erase(std::remove(line.begin(), line.end(), '`'), line.end());
         }
-
-        line = std::regex_replace(line, std::regex("@"), "<span style=\"color:#0000ff;\">");
-        line = std::regex_replace(line, std::regex("X"), "</span>");
-
-        line.erase(std::remove(line.begin(), line.end(), '~'), line.end());
-        line.erase(std::remove(line.begin(), line.end(), '`'), line.end());
     }
 }
 
@@ -266,23 +272,146 @@ void SrcHighlighter::handleSingleLineComments()
 
 void SrcHighlighter::handleMultiLineComments()
 {
-    bool commentOpeningFound = false;
+    bool iterInComment = false; // kommenten belül vagyunk-e?
 
     for (auto& line : file)
     {
-        for (int i = 0; i < static_cast<int>(line.size() - 1); ++i)
+        int n = static_cast<int>(line.size());
+        for (int i = 0; i < n - 1; ++i)
         {
-            if (!commentOpeningFound)
+            if (!iterInComment)
             {
                 if(line[i] == '/' && line[i + 1] == '*')
                 {
-                    commentOpeningFound = true;
+                    line[i] = line[i + 1] = '~';
+                    iterInComment = true;
+
+                    // Megelőző nyitó HTML tagek kiszűrése. (Ha befér egyáltalán)
+                    if (i - HTML_OPEN_TAG_LENGTH > 0)
+                    {
+                        for (int j = 0; i - j >= 0; j++)
+                        {
+                            if (line.substr(i - j, 5) == "<span" )
+                            {
+                                for (int k = 0; k < HTML_OPEN_TAG_LENGTH; ++k)
+                                {
+                                    line[i - j + k] = '@';
+                                }
+                            }
+                            // Az első komment előtti tag záró tag volt, ezzel nincs baj
+                            else if (line.substr(i - j, 6) == "</span")
+                            {
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             else
             {
+                if (line[i] == '*' && line[i + 1] == '/')
+                {
+                    line[i] = line[i + 1] = '`';
+                    iterInComment = false;
 
+                    if (i + HTML_CLOSE_TAG_LENGTH < n)
+                    {
+                        for (int j = i + 2; j < n - HTML_CLOSE_TAG_LENGTH; ++j)
+                        {
+                            if (line.substr(j, HTML_CLOSE_TAG_LENGTH) == "</span")
+                            {
+                                for (int k = 0;  k < HTML_CLOSE_TAG_LENGTH; ++k)
+                                {
+                                    line[j + k] = '@';
+                                }
+                            }
+                            // a komment zárása után nyitó taget teláltunk legelőször, ez nem gáz.
+                            else if (line.substr(j, 5) == "<span")
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+                // komment-en belül vagyunk ténylegesen, a feladat a html tagek eltüntetése
+                else
+                {
+                    if (line.substr(i, 5) == "<span")
+                    {
+                        for (int j = 0; j < HTML_OPEN_TAG_LENGTH; ++j)
+                        {
+                            line[i + j] = '@';
+                        }
+                    }
+                    else if (line.substr(i, 6) == "</span")
+                    {
+                        for (int j = 0; j < HTML_CLOSE_TAG_LENGTH; ++j)
+                        {
+                            line[i + j] = '@';
+                        }
+                    }
+                }
             }
+        }
+
+        line = std::regex_replace(line, std::regex("~~"), R"(<span style="color:#666666;">/*)");
+        line = std::regex_replace(line, std::regex("``"), R"(*/</span>)");
+        line = std::regex_replace(line, std::regex("@"), "");
+    }
+
+
+}
+
+void SrcHighlighter::doubleCheckStringLiterals()
+{
+    std::regex regexForBadString(R"(<span style="color:#339900;">".*</span>.*"</span>)");
+    for (auto& line : file)
+    {
+        if (std::regex_search(line, regexForBadString))
+        {
+            int loc = line.find(R"(<span style="color:#339900;">")");
+
+            int innerNonClosedTags = 0;
+            int substitutionOn = false;
+
+            int n = static_cast<int>(line.size());
+            for (int i = loc; i < n; ++i)
+            {
+                if (i + HTML_OPEN_TAG_LENGTH < n && line.substr(i, HTML_OPEN_TAG_LENGTH) == R"(<span style="color:#339900;">)")
+                {
+                    i += HTML_OPEN_TAG_LENGTH;
+                    innerNonClosedTags++;
+                    substitutionOn = true;
+                }
+                else if (i + HTML_OPEN_TAG_LENGTH < n && line.substr(i, 5) == "<span" && substitutionOn)
+                {
+                    innerNonClosedTags++;
+                    for (int j = 0; j < HTML_OPEN_TAG_LENGTH; ++j)
+                    {
+                        line[i + j] = '`';
+                    }
+
+                    i += HTML_OPEN_TAG_LENGTH;
+                }
+                else if (i + HTML_CLOSE_TAG_LENGTH < n && line.substr(i, HTML_CLOSE_TAG_LENGTH) == "</span>" && innerNonClosedTags > 0 && substitutionOn)
+                {
+                    innerNonClosedTags--;
+
+                    if (innerNonClosedTags == 0)
+                    {
+                        substitutionOn = false;
+                    }
+                    else
+                    {
+                        for (int j = 0; j < HTML_CLOSE_TAG_LENGTH; ++j)
+                        {
+                            line[i + j] = '`';
+                        }
+                    }
+                }
+            }
+
+            line = std::regex_replace(line, std::regex("`"), "");
         }
     }
 }

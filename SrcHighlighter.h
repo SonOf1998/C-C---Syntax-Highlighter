@@ -20,10 +20,11 @@
 
 #define PREPROCESSOR_FILE_PATH "preprocessor.txt"
 
+constexpr int HTML_OPEN_TAG_LENGTH = 29;
+constexpr int HTML_CLOSE_TAG_LENGTH = 7;
+
 class SrcHighlighter
 {
-    std::vector<std::string>& file;
-
     std::vector<std::string> keywords;
     std::vector<std::string> prep_dirs;
 
@@ -31,15 +32,23 @@ class SrcHighlighter
 
     void importPreprocessorDirectives();
     virtual void importKeywords();
-    void doSyntaxHighlighting();
 
     void highlightCharsAndStringLiterals();
-    void highlightEscapes();
     void highlightKeywords();
+    virtual void highlightProgrammingLangSpecificStuff() = 0;
+    void doubleCheckStringLiterals();
+    void highlightEscapes();
     void highlightPreprocessorDirectives();
     void highlightNumericConstants();
     void handleSingleLineComments();
     void handleMultiLineComments();
+
+    void doSyntaxHighlighting();
+
+protected:
+
+    std::vector<std::string>& file;
+    std::vector<std::string> unmodifiedFile;
 
 public:
 

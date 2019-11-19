@@ -11,7 +11,20 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5834f8cd-0ac1-4b20-9a68-d8500c411094" name="Default Changelist" comment="" />
+    <list default="true" id="5834f8cd-0ac1-4b20-9a68-d8500c411094" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CSrcHighlighter.h" beforeDir="false" afterPath="$PROJECT_DIR$/CSrcHighlighter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CppSrcHighlighter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CppSrcHighlighter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CppSrcHighlighter.h" beforeDir="false" afterPath="$PROJECT_DIR$/CppSrcHighlighter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SrcHighlighter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SrcHighlighter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SrcHighlighter.h" beforeDir="false" afterPath="$PROJECT_DIR$/SrcHighlighter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_keywords.txt" beforeDir="false" afterPath="$PROJECT_DIR$/c_keywords.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_test.c" beforeDir="false" afterPath="$PROJECT_DIR$/c_test.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c_keywords.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c_keywords.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/highlighted_src.html" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/highlighted_src.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hard_test_c.c" beforeDir="false" afterPath="$PROJECT_DIR$/hard_test_c.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +35,11 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1TAi4P7S952XoM6WVCTwetDPCJP" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="node.js.detected.package.eslint" value="true" />
@@ -32,6 +49,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -80,11 +98,25 @@
       <workItem from="1573909214856" duration="450000" />
       <workItem from="1573911804751" duration="1282000" />
       <workItem from="1573913100597" duration="863000" />
-      <workItem from="1573913976552" duration="52516000" />
+      <workItem from="1573913976552" duration="53329000" />
+      <workItem from="1574008191944" duration="31050000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

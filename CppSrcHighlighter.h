@@ -7,9 +7,14 @@
 
 #define CPP_KEYWORDS_TXT_PATH "cpp_keywords.txt";
 
-class CppSrcHighlighter : public SrcHighlighter
+class CppSrcHighlighter final : public SrcHighlighter
 {
     [[nodiscard]] const char* getKeywordsTxtPath() const noexcept override;
+
+
+    void highlightTemplateParams();
+    void highlightNamespaces();
+    void highlightProgrammingLangSpecificStuff() override;
 
 public:
 

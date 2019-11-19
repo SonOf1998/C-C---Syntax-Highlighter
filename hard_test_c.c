@@ -303,7 +303,7 @@ int main()
             {
                 // UTF8 (BOM) Byte Order Mark eltávolítás a legelsõ sorból
                 // sor[0,1,2] = 0xEF,0xBB,0xBF
-		// <J/x/E>
+		// J/x/E
 
                 memmove(sor, sor + 3, sizeof(sor));
                 elso_sor_beolvasva = true;
@@ -429,7 +429,7 @@ int main()
                 BEOLVASOTT_KARAKTER = toupper(input[0]);
                 while(strlen(input) != 1 || (BEOLVASOTT_KARAKTER != 'I' && BEOLVASOTT_KARAKTER != 'N'))
                 {
-                    printf("Ervenytelen! <I/N>: ");
+                    printf("Ervenytelen! I/N: ");
                     scanf("%2s%*[^\n]", input);
                     BEOLVASOTT_KARAKTER = toupper(input[0]);
                 }
@@ -448,7 +448,7 @@ int main()
                 BEOLVASOTT_KARAKTER = toupper(input[0]);
                 while(strlen(input) != 1 || (BEOLVASOTT_KARAKTER != 'A' && BEOLVASOTT_KARAKTER != 'B' && BEOLVASOTT_KARAKTER != 'C' && BEOLVASOTT_KARAKTER != 'D'))
                 {
-                    printf("Ismeretlen karakter! Probalja ujra! <A/B/C/D>: ");
+                    printf("Ismeretlen karakter! Probalja ujra! A/B/C/D: ");
                     scanf("%2s%*[^\n]", input);
                     BEOLVASOTT_KARAKTER = toupper(input[0]);
                 }
@@ -463,12 +463,12 @@ int main()
                         eddigi_nyeremeny = nyeremenyek[i];
                         break;
                     }
-                    printf("\nHelyes valasz. Folytassuk? <I/N>: ");
+                    printf("\nHelyes valasz. Folytassuk? I/N: ");
                     scanf("%2s%*[^\n]", input);
                     BEOLVASOTT_KARAKTER = toupper(input[0]);
                     while(strlen(input) != 1 || (BEOLVASOTT_KARAKTER != 'I' && BEOLVASOTT_KARAKTER != 'N'))
                     {
-                        printf("Ervenytelen! <I/N>: ");
+                        printf("Ervenytelen! I/N: ");
                         scanf("%2s%*[^\n]", input);
                         BEOLVASOTT_KARAKTER = toupper(input[0]);
                     }
@@ -524,7 +524,7 @@ int main()
                         eddigi_nyeremeny = nyeremenyek[i];
                         break;
                     }
-                    printf("\nHelyes valasz. Folytassuk? <I/N>: ");
+                    printf("\nHelyes valasz. Folytassuk? I/N: ");
                     scanf("%2s%*[^\n]", input);
                     BEOLVASOTT_KARAKTER = toupper(input[0]);
                     while(strlen(input) != 1 || (BEOLVASOTT_KARAKTER != 'I' && BEOLVASOTT_KARAKTER != 'N'))
@@ -574,7 +574,7 @@ int main()
         BEOLVASOTT_KARAKTER = toupper(input[0]);
         while(strlen(input) != 1 || (BEOLVASOTT_KARAKTER != 'I' && BEOLVASOTT_KARAKTER != 'N'))
         {
-            printf("Ervenytelen! <I/N>: ");
+            printf("Ervenytelen! I/N: ");
             scanf("%2s%*[^\n]", input);
             BEOLVASOTT_KARAKTER = toupper(input[0]);
         }

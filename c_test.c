@@ -4,6 +4,17 @@
 // (asddasdasd)
 
 
+// 1.1f,2
+
+const char const* arr = "float int auto " "auto auto"  1.0f "asd" ("int 5") "double" "register" register
+"1.1f 4 4 5 6 [2] 1.0f 1022.103,5,6.0f"
+
+int* a = NULL;
+NULL;NULL;
+NULL
+
+if(a!=NULL && a ! =    NULL) "NULL";
+
 #include <stdio.h>
 #include <stdbool.h>
 #include "mmm.hpp"
@@ -37,6 +48,30 @@ bool lowerThan10(int a)
 
 // int  long long int unsigned auto 10 4.4
 
+/* basic 
+* multiline
+* comment
+* without
+* keywords*/
+
+/* fake multiline comment =) */
+
+/* auto multiline
+	register comment
+	 	int with char
+			return keywords */
+
+"MULTILINE COMMENT VS STRING/* "asda
+asdasdd
+asdd
+adsad*/
+
+/* eddig ko/*mment */ itt már nem int */
+
+int /*
+	random comm
+auto *************** * / ent*/ doublechar double;char;auto;
+
 #ifdef lol
 
 int main()
@@ -54,7 +89,7 @@ int main()
 	//foreach
 	//eachfor
 
-	for(unsigned long long int i = 0; i < 15; ++i)	//  long
+	for(unsigned long long int i = 0; i < 15; ++i)	//  long long is 0
 	{
 		if(lowerThan10(i) == true)
 		{
