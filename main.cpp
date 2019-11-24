@@ -5,7 +5,6 @@
 #include <string_view>
 #include <vector>
 
-#include "SrcHighlighter.h"
 #include "CSrcHighlighter.h"
 #include "CppSrcHighlighter.h"
 
@@ -15,9 +14,18 @@
 /*
  * Gyengeségek:
  *
- * A @ X ~ ` katakterek sehol nem fordulhatnak elő a forráskódban
+ * A @ X ~ ` katakterek sehol nem fordulhatnak elő a forráskódban. Jobb esetben csak nem jelennek meg, rosszabb esetben
+ * megtörik a html formázást.
  * A string literálokban és kommentekben nem fordulhatnak elő html tagszerű elemek (<...>), include-ok kivételt képeznek.
- * String literálok utáni számkonstansok már nem lesznek kikékítve.
+ * String literálok utáni számkonstansok már nem (mindig) lesznek kikékítve.
+ * Hexák rossz színezéssel jelennek meg. *
+ * egyéb
+ *
+ *
+ *
+ * test.c
+ * test.cpp
+ *
  *
  */
 
@@ -38,9 +46,10 @@ int main()
     }
     is.close();
 
-    const std::unique_ptr<SrcHighlighter> highlighter = std::move (
-            [&]() -> std::unique_ptr<SrcHighlighter>
+    const std::unique_ptr<CSrcHighlighter> highlighter = std::move (
+            [&]() -> std::unique_ptr<CSrcHighlighter>
             {
+                // .h/.hpp fájlokat nem fogad
                 std::regex cFileRegex(R"(.*\.c)");
                 std::regex cppFileRegex(R"(.*\.((cc)|(cpp)|(cxx)))");
 
@@ -61,6 +70,3 @@ int main()
     highlighter->exportHighlightedSrcCode(TEST_OUTPUT);
 }
 
-/* C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\c_test.c */
-/* C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\hard_test_c.c*/
-/* C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\c_file_elodtol.c*/

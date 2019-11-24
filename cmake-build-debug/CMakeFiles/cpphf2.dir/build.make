@@ -69,22 +69,9 @@ CMakeFiles/cpphf2.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cpphf2.dir/main.cpp.s"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\main.cpp" -o CMakeFiles\cpphf2.dir\main.cpp.s
 
-CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.obj: CMakeFiles/cpphf2.dir/flags.make
-CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.obj: ../SrcHighlighter.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.obj"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\cpphf2.dir\SrcHighlighter.cpp.obj -c "C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\SrcHighlighter.cpp"
-
-CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.i"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\SrcHighlighter.cpp" > CMakeFiles\cpphf2.dir\SrcHighlighter.cpp.i
-
-CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.s"
-	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\SrcHighlighter.cpp" -o CMakeFiles\cpphf2.dir\SrcHighlighter.cpp.s
-
 CMakeFiles/cpphf2.dir/CSrcHighlighter.cpp.obj: CMakeFiles/cpphf2.dir/flags.make
 CMakeFiles/cpphf2.dir/CSrcHighlighter.cpp.obj: ../CSrcHighlighter.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/cpphf2.dir/CSrcHighlighter.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/cpphf2.dir/CSrcHighlighter.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\cpphf2.dir\CSrcHighlighter.cpp.obj -c "C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\CSrcHighlighter.cpp"
 
 CMakeFiles/cpphf2.dir/CSrcHighlighter.cpp.i: cmake_force
@@ -97,7 +84,7 @@ CMakeFiles/cpphf2.dir/CSrcHighlighter.cpp.s: cmake_force
 
 CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.obj: CMakeFiles/cpphf2.dir/flags.make
 CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.obj: ../CppSrcHighlighter.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.obj"
 	C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\cpphf2.dir\CppSrcHighlighter.cpp.obj -c "C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\CppSrcHighlighter.cpp"
 
 CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.i: cmake_force
@@ -111,7 +98,6 @@ CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.s: cmake_force
 # Object files for target cpphf2
 cpphf2_OBJECTS = \
 "CMakeFiles/cpphf2.dir/main.cpp.obj" \
-"CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.obj" \
 "CMakeFiles/cpphf2.dir/CSrcHighlighter.cpp.obj" \
 "CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.obj"
 
@@ -119,14 +105,13 @@ cpphf2_OBJECTS = \
 cpphf2_EXTERNAL_OBJECTS =
 
 cpphf2.exe: CMakeFiles/cpphf2.dir/main.cpp.obj
-cpphf2.exe: CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.obj
 cpphf2.exe: CMakeFiles/cpphf2.dir/CSrcHighlighter.cpp.obj
 cpphf2.exe: CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.obj
 cpphf2.exe: CMakeFiles/cpphf2.dir/build.make
 cpphf2.exe: CMakeFiles/cpphf2.dir/linklibs.rsp
 cpphf2.exe: CMakeFiles/cpphf2.dir/objects1.rsp
 cpphf2.exe: CMakeFiles/cpphf2.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable cpphf2.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable cpphf2.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\cpphf2.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

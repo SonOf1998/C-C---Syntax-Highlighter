@@ -3,17 +3,12 @@
 
 CMakeFiles/cpphf2.dir/CSrcHighlighter.cpp.obj: ../CSrcHighlighter.cpp
 CMakeFiles/cpphf2.dir/CSrcHighlighter.cpp.obj: ../CSrcHighlighter.h
-CMakeFiles/cpphf2.dir/CSrcHighlighter.cpp.obj: ../SrcHighlighter.h
 
+CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.obj: ../CSrcHighlighter.h
 CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.obj: ../CppSrcHighlighter.cpp
 CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.obj: ../CppSrcHighlighter.h
-CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.obj: ../SrcHighlighter.h
-
-CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.obj: ../SrcHighlighter.cpp
-CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.obj: ../SrcHighlighter.h
 
 CMakeFiles/cpphf2.dir/main.cpp.obj: ../CSrcHighlighter.h
 CMakeFiles/cpphf2.dir/main.cpp.obj: ../CppSrcHighlighter.h
-CMakeFiles/cpphf2.dir/main.cpp.obj: ../SrcHighlighter.h
 CMakeFiles/cpphf2.dir/main.cpp.obj: ../main.cpp
 

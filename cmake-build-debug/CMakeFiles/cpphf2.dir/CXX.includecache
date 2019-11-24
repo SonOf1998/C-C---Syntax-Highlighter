@@ -6,17 +6,7 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CppSrcHighlighter.cpp
-CppSrcHighlighter.h
-C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CppSrcHighlighter.h
-
-C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CppSrcHighlighter.h
-regex
--
-SrcHighlighter.h
-C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/SrcHighlighter.h
-
-C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/SrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CSrcHighlighter.h
 algorithm
 -
 fstream
@@ -29,4 +19,28 @@ string
 -
 vector
 -
+
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CppSrcHighlighter.h
+regex
+-
+CSrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CSrcHighlighter.h
+
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/main.cpp
+iostream
+-
+memory
+-
+regex
+-
+string
+-
+string_view
+-
+vector
+-
+CSrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CSrcHighlighter.h
+CppSrcHighlighter.h
+C:/Users/ScHoolBoy Q/CLionProjects/cpphf2/CppSrcHighlighter.h
 

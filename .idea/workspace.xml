@@ -13,16 +13,20 @@
   <component name="ChangeListManager">
     <list default="true" id="5834f8cd-0ac1-4b20-9a68-d8500c411094" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CSrcHighlighter.h" beforeDir="false" afterPath="$PROJECT_DIR$/CSrcHighlighter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CppSrcHighlighter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CppSrcHighlighter.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CppSrcHighlighter.h" beforeDir="false" afterPath="$PROJECT_DIR$/CppSrcHighlighter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SrcHighlighter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/SrcHighlighter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SrcHighlighter.h" beforeDir="false" afterPath="$PROJECT_DIR$/SrcHighlighter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c_keywords.txt" beforeDir="false" afterPath="$PROJECT_DIR$/c_keywords.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/c_test.c" beforeDir="false" afterPath="$PROJECT_DIR$/c_test.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c_keywords.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c_keywords.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SrcHighlighter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/CSrcHighlighter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SrcHighlighter.h" beforeDir="false" afterPath="$PROJECT_DIR$/CSrcHighlighter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_file_elodtol.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/c_test.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cpphf2.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/cpphf2.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/cpphf2.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/cpphf2.cbp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/highlighted_src.html" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/highlighted_src.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hard_test_c.c" beforeDir="false" afterPath="$PROJECT_DIR$/hard_test_c.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hard_test_c.c" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -100,6 +104,10 @@
       <workItem from="1573913100597" duration="863000" />
       <workItem from="1573913976552" duration="53329000" />
       <workItem from="1574008191944" duration="31050000" />
+      <workItem from="1574229508035" duration="2222000" />
+      <workItem from="1574279347744" duration="310000" />
+      <workItem from="1574286801165" duration="7145000" />
+      <workItem from="1574514000836" duration="10602000" />
     </task>
     <servers />
   </component>

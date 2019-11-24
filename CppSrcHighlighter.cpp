@@ -10,7 +10,7 @@ void CppSrcHighlighter::highlightNamespaces()
 {
     for (auto& line : file)
     {
-        std::regex regexForNamespaces("[[:alpha:]]+::");
+        std::regex regexForNamespaces("[[:alpha:]]*_?[[:alpha:]]+::");
         line = std::regex_replace(line, regexForNamespaces, "<span style=\"color:#007FA2;\">$0</span>");
     }
 }

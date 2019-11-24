@@ -3,8 +3,26 @@
 // (BOM)[]
 // (asddasdasd)
 
+intel
+4.4; // " asd 5 "
 
 // 1.1f,2
+"" \t ""
+
+m[s*16+o]
+
+			for (o = 0; o < 16; o++) {
+				if (o == 8) fprintf(fp, " ");
+				if (s*16+o < size)
+					fprintf(fp, "%02x ", m[s*16+o]);
+				else
+					fprintf(fp, "   ");
+			}
+			fprintf(fp, " ");
+			for (o = 0; o < 16; o++) {
+				if (s*16+o < size)
+					fprintf(fp, "%c", isprint(m[s*16+o]) ? m[s*16+o] : '.');
+				else
 
 const char const* arr = "float int auto " "auto auto"  1.0f "asd" ("int 5") "double" "register" register
 "1.1f 4 4 5 6 [2] 1.0f 1022.103,5,6.0f"
@@ -19,7 +37,8 @@ if(a!=NULL && a ! =    NULL) "NULL";
 #include <stdbool.h>
 #include "mmm.hpp"
 
-#define lol
+#define lol "letdafunbegin"
+#define lol2 3.14159265395 // pi
 
 typedef struct x
 {

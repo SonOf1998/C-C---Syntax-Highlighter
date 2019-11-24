@@ -176,33 +176,6 @@ CppSrcHighlighter.cpp.s:
 	$(MAKE) -f CMakeFiles\cpphf2.dir\build.make CMakeFiles/cpphf2.dir/CppSrcHighlighter.cpp.s
 .PHONY : CppSrcHighlighter.cpp.s
 
-SrcHighlighter.obj: SrcHighlighter.cpp.obj
-
-.PHONY : SrcHighlighter.obj
-
-# target to build an object file
-SrcHighlighter.cpp.obj:
-	$(MAKE) -f CMakeFiles\cpphf2.dir\build.make CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.obj
-.PHONY : SrcHighlighter.cpp.obj
-
-SrcHighlighter.i: SrcHighlighter.cpp.i
-
-.PHONY : SrcHighlighter.i
-
-# target to preprocess a source file
-SrcHighlighter.cpp.i:
-	$(MAKE) -f CMakeFiles\cpphf2.dir\build.make CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.i
-.PHONY : SrcHighlighter.cpp.i
-
-SrcHighlighter.s: SrcHighlighter.cpp.s
-
-.PHONY : SrcHighlighter.s
-
-# target to generate assembly for a file
-SrcHighlighter.cpp.s:
-	$(MAKE) -f CMakeFiles\cpphf2.dir\build.make CMakeFiles/cpphf2.dir/SrcHighlighter.cpp.s
-.PHONY : SrcHighlighter.cpp.s
-
 main.obj: main.cpp.obj
 
 .PHONY : main.obj
@@ -245,9 +218,6 @@ help:
 	@echo ... CppSrcHighlighter.obj
 	@echo ... CppSrcHighlighter.i
 	@echo ... CppSrcHighlighter.s
-	@echo ... SrcHighlighter.obj
-	@echo ... SrcHighlighter.i
-	@echo ... SrcHighlighter.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

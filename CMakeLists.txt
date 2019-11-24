@@ -3,4 +3,4 @@ project(cpphf2)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(cpphf2 main.cpp SrcHighlighter.cpp SrcHighlighter.h CSrcHighlighter.cpp CSrcHighlighter.h CppSrcHighlighter.cpp CppSrcHighlighter.h)
+add_executable(cpphf2 main.cpp CSrcHighlighter.cpp CSrcHighlighter.h CppSrcHighlighter.cpp CppSrcHighlighter.h)

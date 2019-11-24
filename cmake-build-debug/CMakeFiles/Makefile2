@@ -73,12 +73,12 @@ preinstall:
 CMakeFiles/cpphf2.dir/all:
 	$(MAKE) -f CMakeFiles\cpphf2.dir\build.make CMakeFiles/cpphf2.dir/depend
 	$(MAKE) -f CMakeFiles\cpphf2.dir\build.make CMakeFiles/cpphf2.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" --progress-num=1,2,3,4,5 "Built target cpphf2"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir="C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" --progress-num=1,2,3,4 "Built target cpphf2"
 .PHONY : CMakeFiles/cpphf2.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/cpphf2.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" 5
+	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" 4
 	$(MAKE) -f CMakeFiles\Makefile2 CMakeFiles/cpphf2.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\ScHoolBoy Q\CLionProjects\cpphf2\cmake-build-debug\CMakeFiles" 0
 .PHONY : CMakeFiles/cpphf2.dir/rule
